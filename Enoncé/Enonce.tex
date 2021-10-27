@@ -1,0 +1,175 @@
+\documentclass[12pt]{article}
+\usepackage[french]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{latexsym,epsfig}
+\input{epsf}
+
+\usepackage[colorlinks, linkcolor=blue]{hyperref}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+
+\tikzstyle{DBremarque}=[rectangle, draw=green, fill=green!20, rounded corners=2ex,
+           text=black, inner sep=1em]
+\tikzstyle{DBremarqueicon}=[draw=green, fill=green!10, rounded corners]
+
+\tikzstyle{DBavertissement}=[rectangle, draw=red, fill=red!20, rounded corners=2ex,
+           text=black, inner sep=1em]
+\tikzstyle{DBavertissementicon}=[draw=red, fill=red!10, rounded corners]
+
+\newlength{\boxtitlewidth}
+\setlength{\boxtitlewidth}{1em}
+
+\newlength{\boxspacewidth}
+\setlength{\boxspacewidth}{40pt}
+
+\newlength{\boxbodywidth}
+\setlength{\boxbodywidth}{.9\columnwidth}
+\addtolength{\boxbodywidth}{-\boxtitlewidth}
+\addtolength{\boxbodywidth}{-\boxspacewidth}
+
+\newlength{\boxtitleshift}
+\setlength{\boxtitleshift}{22pt}
+\addtolength{\boxtitleshift}{4ex}
+
+\newlength{\templengthforbox}
+\newlength{\templengthforfig}
+\newlength{\DBvspace}
+\setlength{\DBvspace}{5ex}
+
+\newcommand{\remarque}[2]
+{
+	\setlength{\templengthforbox}{#2}
+	\addtolength{\templengthforbox}{-\boxtitlewidth}
+	\addtolength{\templengthforbox}{-\boxspacewidth}
+	
+	\begin{center}
+	\begin{tikzpicture}[node distance=0pt]
+	\node [DBremarque] (Texte) [text width=\templengthforbox] {\small #1} ;
+	\end{tikzpicture}
+	\end{center}
+}
+
+\newcommand{\remarquewrap}[3]
+{
+	\setlength{\templengthforbox}{#3}
+	\setlength{\templengthforfig}{\templengthforbox}
+	\addtolength{\templengthforfig}{-1em}
+	
+	\begin{wrapfigure}{#1}{\templengthforfig}
+		\vspace{-\DBvspace}
+		\centering
+		\remarque{#2}{#3}
+		\vspace{-\DBvspace}
+	\end{wrapfigure}
+}
+
+\newcommand{\avertissement}[2]
+{
+	\setlength{\templengthforbox}{#2}
+	\addtolength{\templengthforbox}{-\boxtitlewidth}
+	\addtolength{\templengthforbox}{-\boxspacewidth}
+	
+	\begin{center}
+	\begin{tikzpicture}[node distance=0pt]
+	\node [DBavertissement] (Texte) [text width=\templengthforbox] 	{\small #1} ;
+	\end{tikzpicture}
+	\end{center}
+}
+
+\newcommand{\avertissementwrap}[3]
+{
+	\setlength{\templengthforbox}{#3}
+	\setlength{\templengthforfig}{\templengthforbox}
+	\addtolength{\templengthforfig}{-1em}
+	
+	\begin{wrapfigure}{#1}{\templengthforfig}
+		\vspace{-\DBvspace}
+		\centering
+		\avertissement{#2}{#3}
+		\vspace{-\DBvspace}
+	\end{wrapfigure}
+}
+
+\usepackage{setspace}
+
+\usepackage{color}
+\newcommand{\kwit}[1]{\mathit{#1}}
+
+\newcommand{\session}{Été}
+\newcommand{\annee}{2019}
+\newcommand{\dateRemise}{vendredi 5 juillet}
+\newcommand{\heureRemise}{23h59}
+
+\begin{document}
+
+\begin{center}
+UNIVERSITÉ DE SHERBROOKE
+
+DÉPARTEMENT D'INFORMATIQUE
+\end{center}
+
+
+\begin{center}
+Devoir \# 3 - \session{} \annee{}
+
+IFT 287
+
+Exploitation de base de données relationnelles et OO
+\end{center}
+
+{\bf Devoir à remettre au plus tard le \dateRemise{} \annee{} à \heureRemise{}.}
+
+\vspace*{0.5cm}
+
+Ce devoir a pour but de vous faire pratiquer l'utilisation d'une base de données objet en implémentant une solution au problème dans le langage Java en utilisant ObjectDB.
+
+\vspace*{0.5cm}
+
+\remarque{\noindent Ce devoir est à faire en équipe de 2 obligatoirement.}{1.0\textwidth}
+	
+\remarque{\noindent Votre fonction \texttt{main} doit se trouver dans la classe \texttt{AubergeInn}. La classe \texttt{AubergeInn} doit se trouver dans le package \texttt{AubergeInn}.}{1.0\textwidth}
+	
+\avertissement{\noindent Il est fortement recommandé de faire les différentes étapes du devoir dans l'ordre présenté.}{1.0\textwidth}
+
+\avertissement{\noindent Une erreur lors de la soumission vous fera perdre 50 points.}{1.0\textwidth}
+
+\avertissement{\noindent Tous vos fichiers doivent être encodés en UTF-8 sans BOM.}{1.0\textwidth}
+
+\newpage
+
+Il peut être pertinent de sauvegarder directement les objets en mémoire vers une base de données objet afin de simplifier les traitements à effectuer. Dans ce devoir, vous avez à réaliser les tâches suivantes :
+
+\begin{enumerate}
+\item Écrire un programme en utilisant l'architecture trois-tiers vue en classe ainsi qu'une base de données objet.
+\end{enumerate}
+
+Le détail de chacune des parties est donné dans les sections suivantes.
+
+
+\section{Partie 1}
+
+L'entreprise \textbf{L'auberge-Inn} désire modifier le logiciel que vous leur avez fourni afin de ne plus avoir besoin d'utiliser un serveur de base de données SQL dédié. Vous avez décidé que votre logiciel pourrait utiliser ObjectDB comme base de données objet. Vous devez donc modifier votre logiciel fait dans le devoir précédant afin d'utiliser ObjectDB à la place de PostgreSQL. Votre programme doit s'exécuter avec la même séquence d'arguments en entrée que vos devoirs précédent.
+
+Comme vous n'utilisez plus de requêtes SQL, vous n'avez pas à fournir de fichiers script.
+
+\section{Soumission}
+
+Vous devez soumettre, sur \url{http://turnin.dinf.usherbrooke.ca} dans le projet TP3, un fichier nommé TP3.zip contenant une exportation de votre projet.
+
+Votre soumission devrait contenir au minimum la description qui suit. Eclipse ajoute
+plusieurs fichiers, il est donc possible, et normal, que vous ayez plus de fichiers dans votre soumission.
+
+\begin{verbatim}
+TP3.zip
+  +--> TP3 (dossier)
+       +--> src (dossier)
+       |    +--> AubergeInn (dossier)
+       |    |    +--> Vos fichiers de code (.java)
+\end{verbatim}
+
+Bonne chance!
+
+\end{document}

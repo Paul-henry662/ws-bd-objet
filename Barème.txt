@@ -1,0 +1,10 @@
+20 points pour les tests (10 points par tests)
+
+20 points pour le respect de l’énoncé
+
+60 points pour le code
+-	Respect d’une architecture objet. Pas de classe liaison pour représenter les associations relationnelles, il y a directement des listes d’objet
+-	Les annotations obligatoires sont correctes (entity, id)
+-	Les transactions sont ouvertes dans les gestionnaires de transactions, avec les commits
+-	Les méthodes qui updates les propriétés des objets sont dans les tuples, et non dans les gestionnaires
+-	Etc (je crois que tu vois le genre)
