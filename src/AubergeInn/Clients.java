@@ -16,6 +16,8 @@ public class Clients {
 	
 	public Clients(Connexion cx)  {
 		this.cx = cx;
+		
+		stmtSelect = cx.getConnection().createQuery(QUERYSELECT, Client.class);
 	}
 	
 	public Connexion getConnexion() {
