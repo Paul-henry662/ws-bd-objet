@@ -56,7 +56,7 @@ public class Connexion
     	em = emf.createEntityManager();
         
         System.out.println("Ouverture de la connexion :");
-        System.out.println("  Connecté sur la BD ObjectDB " + bd + " avec l'utilisateur " + user);
+        System.out.println("  Connecte sur la BD ObjectDB " + bd + " avec l'utilisateur " + user);
     }
 
     /**
@@ -66,7 +66,7 @@ public class Connexion
     {
         em.close();
         emf.close();
-        System.out.println("Connexion fermée");
+        System.out.println("Connexion fermee");
     }
     
     public void demarreTransaction()

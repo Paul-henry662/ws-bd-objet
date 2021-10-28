@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Clients {
-	private static final String QUERYSELECT = "SELECT * FROM Clients WHERE idClient = ?";
+	private static final String QUERYSELECT = "SELECT c FROM Client c WHERE c.m_idClient = :idClient";
 	private static final String QUERYINSERT = "INSERT INTO Clients(idClient, prenom, nom, age) VALUES(?, ?, ?, ?)";
 	private static final String QUERYDELETE = "DELETE FROM Clients WHERE idClient = ?";
 	
