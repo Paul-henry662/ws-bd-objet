@@ -15,19 +15,19 @@ public class GestionClients {
 		this.reservations = reservations;
 	}
 	
-	public void ajouterClient(int idClient, String Prenom, String Nom, int Age ) throws SQLException, AubergeInnException {
-		if(!clients.existe(idClient)) {
-			clients.ajouterClient(idClient, Prenom, Nom, Age);
+	public void ajouterClient(Client client) throws SQLException, AubergeInnException {
+		if(!clients.existe(client)) {
+			clients.ajouterClient(client);
 			cx.commit();
 		}
 		else
 			throw new AubergeInnException("Ce client est déjà enregistré.");
 	}
 	
-	public void supprimerClient(int idClient) throws SQLException, AubergeInnException {
-		if(clients.existe(idClient)) {
-			if(!reservations.existeClient(idClient)) {
-				clients.supprimerClient(idClient);
+	public void supprimerClient(Client client) throws SQLException, AubergeInnException {
+		if(clients.existe(client)) {
+			if(!reservations.existeClient(client)) {
+				clients.supprimerClient(client);
 				cx.commit();
 			}else
 				throw new AubergeInnException("Ce client a une ou plusieurs réservation(s) en cours");
@@ -36,9 +36,9 @@ public class GestionClients {
 			throw new AubergeInnException("Ce client n'existe pas.");
 	}
 	
-	public void afficherClient(int idClient) throws SQLException, AubergeInnException {
-		if(clients.existe(idClient)) {
-			Client tupleClient = clients.getClient(idClient);
+	public void afficherClient(Client client) throws SQLException, AubergeInnException {
+		if(clients.existe(client)) {
+			Client tupleClient = clients.getClient(client);
 			List<Reservation> reservationsClient = reservations.getReservations(idClient);
 			
 			System.out.println(tupleClient.toString());

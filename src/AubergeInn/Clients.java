@@ -20,14 +20,14 @@ public class Clients {
 		return this.cx;
 	}
 	
-	public boolean existe(int idClient)  {
-		stmtSelect.setParameter("idClient", idClient);
+	public boolean existe(long idLivre)  {
+		stmtSelect.setParameter("idClient", idLivre);
 		return !stmtSelect.getResultList().isEmpty(); 
 		
 	}
 	
-	public Client getClient(int idClient)  {
-		stmtSelect.setParameter("idClient", idClient);
+	public Client getClient(Client client)  {
+		stmtSelect.setParameter("idClient", client);
 		return stmtSelect.getSingleResult();
 		
 	}
