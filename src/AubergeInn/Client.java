@@ -43,4 +43,11 @@ public class Client {
 	public int getAge() {
 		return m_age;
 	}
+	
+	@Override public String toString() {
+		String str = "\n\n### Client "+this.getPrenom()+" "+this.getNom()+" ###\n"
+					+"-> Age: "+this.getAge()+" ans";
+		
+		return str;
+	}
 }

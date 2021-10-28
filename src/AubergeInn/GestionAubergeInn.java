@@ -24,10 +24,10 @@ public class GestionAubergeInn {
 		this.setChambresServices(new ChambresServices(cx));
 		this.setServices(new Services(cx));
 		this.setReservations(new Reservations(cx));
-		this.setGestionClients(new GestionClients(this.clients, this.reservations));
+		this.setGestionClients(new GestionClients(this.clients, this.reservations, this.chambresServices));
 		this.setGestionChambres(new GestionChambres(this.chambres, this.services, this.chambresServices, this.reservations));
 		this.setGestionServices(new GestionServices(this.chambres, this.services, this.chambresServices));
-		this.setGestionReservations(new GestionReservations(this.reservations, this.chambres));
+		this.setGestionReservations(new GestionReservations(this.reservations, this.clients, this.chambres));
 	}
 
 

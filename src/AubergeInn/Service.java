@@ -35,4 +35,13 @@ public class Service {
 		return m_surplusPrix;
 	}
 	
+	@Override
+	public String toString() {
+		String str = "\n\n+++ Service #"+this.getIdService()+" +++\n"
+					+"-> Description: "+this.getDescription()+"\n"
+					+"-> Surplus de prix: "+this.getSurplusPrix()+"\n";
+		
+		return str;
+	}
+	
 }

@@ -1,7 +1,5 @@
 package AubergeInn;
 
-import java.sql.SQLException;
-
 public class GestionServices {
 	
 	private Chambres chambres;
@@ -17,36 +15,55 @@ public class GestionServices {
 		this.chambresServices = chambresServices;
 	}
 	
-	public void creerService(int idService, String description, double surplusPrix) throws SQLException, AubergeInnException {
-
+	public void creerService(int idService, String description, double surplusPrix) throws AubergeInnException {
+		cx.demarreTransaction();
+		
 		if(!services.existe(idService)) {
-			services.creerService(idService, description, surplusPrix);
+			services.creerService(new Service(idService, description, surplusPrix));
 			cx.commit();
 		}else {
-			throw new AubergeInnException("Ce service existe déjà");
+			cx.rollback();
+			throw new AubergeInnException("Ce service existe deja");
 		}
 	}
 
-	public void inclureService(int idService, int idChambre) throws SQLException, AubergeInnException {
-	
-		if(!chambresServices.existe(idChambre, idService)) {
-			if(services.existe(idService) && chambres.existe(idChambre)) {
-				chambresServices.InclureService(idChambre, idService);
+	public void inclureService(int idService, int idChambre) throws AubergeInnException {
+		cx.demarreTransaction();
+		
+		if(chambres.existe(idChambre) && services.existe(idService)) {
+			Chambre chambre = chambres.getChambre(idChambre);
+			Service service = services.getService(idService);
+			
+			if(!chambresServices.existe(chambre, service)) {
+				chambresServices.inclureService(new ChambreService(chambre, service));
 				cx.commit();
+			}else {
+				cx.rollback();
+				throw new AubergeInnException("Cette chambre inclut deja ce service");
 			}
-			else
-				throw new AubergeInnException("La chambre ou le service n'existe pas.");
 		}else {
-			throw new AubergeInnException("Cette chambre inclut déjà ce service");
+			cx.rollback();
+			throw new AubergeInnException("La chambre ou le service n'existe pas");
 		}
 	}
 	
-	public void enleverService(int idService, int idChambre) throws AubergeInnException, SQLException {
-		if(chambresServices.existe(idChambre, idService)) {
-			chambresServices.enleverService(idChambre, idService);
-			cx.commit();
+	public void enleverService(int idService, int idChambre) throws AubergeInnException {
+		cx.demarreTransaction();
+		
+		if(chambres.existe(idChambre) && services.existe(idService)) {
+			Chambre chambre = chambres.getChambre(idChambre);
+			Service service = services.getService(idService);
+			
+			if(chambresServices.existe(chambre, service)) {
+				chambresServices.enleverService(chambresServices.getChambreService(chambre, service));
+				cx.commit();
+			}else {
+				cx.rollback();
+				throw new AubergeInnException("Cette chambre n'inclut pas ce service");
+			}
 		}else {
-			throw new AubergeInnException("Ce service n'est pas associé à cette chambre");
+			cx.rollback();
+			throw new AubergeInnException("La chambre ou le service n'existe pas");
 		}
 	}
 	

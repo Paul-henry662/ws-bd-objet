@@ -1,6 +1,6 @@
-// Travail fait par :
-//   NomEquipier1 - Matricule
-//   NomEquipier2 - Matricule
+// Travail fait par : NGANKAM Paul-henry
+//   TCHATCHOUA Erwann-Axel
+//   SYAPZE Yves Guerard
 
 package AubergeInn;
 
@@ -102,7 +102,7 @@ public class AubergeInn
                     String nom = readString(tokenizer);
                     int age = readInt(tokenizer);
                     // Appel de la methode des gestionnaires qui traite la transaction specifique
-                    gestionAubergeInn.getGestionClients().ajouterClient(idClient, prenom, nom, age);
+                    gestionAubergeInn.getGestionClients().ajouterClient(new Client(idClient, prenom, nom, age));
                 }
                 else if (command.equals("supprimerClient"))
                 {
@@ -118,7 +118,7 @@ public class AubergeInn
                 	String typeLit = readString(tokenizer);
                 	double prixDeBase = readDouble(tokenizer);
                 	
-                	gestionAubergeInn.getGestionChambres().ajouterChambre(idChambre, nom, typeLit, prixDeBase, true);
+                	gestionAubergeInn.getGestionChambres().ajouterChambre(idChambre, nom, typeLit, prixDeBase);
                 }
                 else if(command.equals("supprimerChambre"))
                 {
@@ -183,7 +183,7 @@ public class AubergeInn
             // Ce rollback est ici seulement pour vous aider et éviter des problèmes lors de la correction
             // automatique. En théorie, il ne sert à rien et ne devrait pas apparaître ici dans un programme
             // fini et fonctionnel sans bogues.
-            cx.rollback();
+            //cx.rollback();
         }
     }
 

@@ -10,7 +10,6 @@ public class Reservation {
 	@GeneratedValue
 	private long m_id;
 	
-	private long m_idReservation;
 	private Client m_client;
 	private Chambre m_chambre;
 	private Date m_dateDebut;
@@ -20,17 +19,15 @@ public class Reservation {
 		
 	}
 	
-	public Reservation(long idReservation, Client client, Chambre chambre) {
-		this.m_idReservation = idReservation;
+	public Reservation(Client client, Chambre chambre, Date dateDebut, Date dateFin) {
 		this.m_client = client;
 		this.m_chambre = chambre;
+		this.m_dateDebut = dateDebut;
+		this.m_dateFin = dateFin;
 	}
 	
 	public long getID() {
 		return m_id;
-	}
-	public long getIdReservation() {
-		return m_idReservation;
 	}
 	public Client getClient() {
 		return m_client;
@@ -43,6 +40,14 @@ public class Reservation {
 	}
 	public Date getDateFin() {
 		return m_dateFin;
+	}
+	
+	public String toString() {
+		String str = "\n*** Reservation Chambre #"+this.getChambre().getIdChambre()+" ***\n"
+					+"-> Date de debut: "+this.getDateDebut()+"\n"
+					+"-> Date de fin: "+this.getDateFin()+"\n";
+		
+		return str;
 	}
 
 }

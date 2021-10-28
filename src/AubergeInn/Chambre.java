@@ -40,8 +40,17 @@ public class Chambre {
 		return m_typeLit;
 	}
 
-	public double getM_prixDeBase() {
+	public double getPrixDeBase() {
 		return m_prixDeBase;
+	}
+	
+	@Override
+	public String toString() {
+		String str = "\n\n### Chambre \""+this.getNom()+"\" ###\n"
+					+"-> Type de lit: "+this.getTypeLit()+"\n"
+					+"-> Prix de base: "+this.getPrixDeBase()+" FCFA";
+		
+		return str;
 	}
 
 }

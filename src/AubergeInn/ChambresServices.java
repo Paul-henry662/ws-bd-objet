@@ -1,46 +1,53 @@
 package AubergeInn;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.TypedQuery;
+
 public class ChambresServices {
-	private static final String QUERYSELECT = "SELECT * FROM Chambres_Services WHERE idChambre = ? AND idService = ?";
-	private static final String QUERYSELECTCHAMBRE = "SELECT * FROM Chambres_Services WHERE idChambre = ?";
-	private static final String QUERYINSERT = "INSERT INTO Chambres_Services(idChambre, idService) VALUES(?, ?)";
-	private static final String QUERYDELETE = "DELETE FROM Chambres_Services WHERE idChambre = ? AND idService = ?";
+	private static final String QUERYSELECT = "SELECT cs FROM ChambreService cs WHERE cs.m_chambre = :chambre AND cs.m_service = :service";
+	private static final String QUERYSELECTCHAMBRE = "SELECT cs.m_service FROM ChambreService cs WHERE cs.m_chambre = :chambre";
 	
-	private PreparedStatement stmtSelect;
-	private PreparedStatement stmtSelectChambre;
-	private PreparedStatement stmtInsert;
-	private PreparedStatement stmtDelete;
+	private TypedQuery<ChambreService> stmtSelect;
+	private TypedQuery<Service> stmtSelectChambre;
 	private Connexion cx;
 	
-	public ChambresServices(Connexion cx) throws SQLException {
+	public ChambresServices(Connexion cx) {
 		this.cx = cx;
+		
+		stmtSelect = cx.getConnection().createQuery(QUERYSELECT, ChambreService.class);
+		stmtSelectChambre = cx.getConnection().createQuery(QUERYSELECTCHAMBRE, Service.class);
 	}
 	
 	public Connexion getConnexion() {
 		return this.cx;
 	}
 	
-	public boolean existe(int idChambre, int idService) throws SQLException {
-		return true;
+	public boolean existe(Chambre chambre, Service service) {
+		stmtSelect.setParameter("chambre", chambre);
+		stmtSelect.setParameter("service", service);
+		
+		return !stmtSelect.getResultList().isEmpty();
 	}
 	
-	public ChambreService getChambreService(int idChambre, int idService) throws SQLException {
-		return new ChambreService();
+	public ChambreService getChambreService(Chambre chambre, Service service) {
+		stmtSelect.setParameter("chambre", chambre);
+		stmtSelect.setParameter("service", service);
+		
+		return stmtSelect.getSingleResult();
 	}
 	
-	public void InclureService(int idChambre, int idService) throws SQLException {
+	public void inclureService(ChambreService chambreService) {
+		cx.getConnection().persist(chambreService);
 	}
 	
-	public void enleverService(int idChambre, int idService) throws SQLException {
+	public void enleverService(ChambreService chambreService) {
+		cx.getConnection().remove(chambreService);
 	}
 	
-	public List<Service> getServices(int idChambre) throws SQLException{		
-		return new ArrayList<Service>();
+	public List<Service> getServices(Chambre chambre) {		
+		stmtSelectChambre.setParameter("chambre", chambre);
+		
+		return stmtSelectChambre.getResultList();
 	}
 }

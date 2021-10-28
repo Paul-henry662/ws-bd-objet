@@ -1,53 +1,79 @@
 package AubergeInn;
 
-import java.sql.Date;
+import java.util.Date;
 import javax.persistence.*;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Reservations {
-	private static final String QUERYSELECT = "SELECT * FROM Reservations WHERE idClient = ? AND idChambre = ?";
-	private static final String QUERYINSERT = "INSERT INTO Reservations(idClient, idChambre, dateDebut, dateFin) VALUES(?, ?, ?, ?)";
-	private static final String QUERYSELECTCLIENT = "SELECT * FROM Reservations WHERE idClient = ?";
-	private static final String QUERYSELECTCHAMBRE = "SELECT * FROM Reservations WHERE idChambre = ?";
+	private static final String QUERYSELECT = "SELECT r FROM Reservation r WHERE r.m_client = :client AND r.m_chambre = :chambre AND r.m_dateDebut = :dateDebut AND r.m_dateFin = :dateFin";
+	private static final String QUERYSELECTCLIENT = "SELECT r FROM Reservation r WHERE r.m_client = :client";
+	private static final String QUERYSELECTCHAMBRE = "SELECT r FROM Reservation r WHERE r.m_chambre = :chambre";
+	private static final String QUERYSELECTCHAMBREACTIVE = "SELECT r FROM Reservation r WHERE (r.m_chambre = :chambre) AND ((:dateDebut BETWEEN r.m_dateDebut AND r.m_dateFin) OR (:dateFin BETWEEN r.m_dateDebut AND r.m_dateFin))";
 
 	private TypedQuery<Reservation> stmtSelect;
-	private TypedQuery<Reservation> stmtInsert;
 	private TypedQuery<Reservation> stmtSelectClient;
 	private TypedQuery<Reservation> stmtSelectChambre;
+	private TypedQuery<Reservation> stmtSelectChambreActive;
 
 	private Connexion cx;
 	
-	public Reservations(Connexion cx) throws SQLException {
+	public Reservations(Connexion cx) {
 		this.cx = cx;
+		
+		stmtSelect = cx.getConnection().createQuery(QUERYSELECT, Reservation.class);
+		stmtSelectClient = cx.getConnection().createQuery(QUERYSELECTCLIENT, Reservation.class);
+		stmtSelectChambre = cx.getConnection().createQuery(QUERYSELECTCHAMBRE, Reservation.class);
+		stmtSelectChambreActive = cx.getConnection().createQuery(QUERYSELECTCHAMBREACTIVE, Reservation.class);
 	}
 	
 	public Connexion getConnexion() {
 		return this.cx;
 	}
 	
-	public boolean existe(int idClient, int idChambre) throws SQLException {
-		return true;
+	public boolean existe(Client client, Chambre chambre, Date dateDebut, Date dateFin) {
+		stmtSelect.setParameter("client", client);
+		stmtSelect.setParameter("chambre", chambre);
+		stmtSelect.setParameter("dateDebut", dateDebut);
+		stmtSelect.setParameter("dateFin", dateFin);
+		
+		return !stmtSelect.getResultList().isEmpty();
 	}
 	
-	public boolean existeClient(int idClient) throws SQLException {
-		return true;
+	public boolean existeClient(Client client) {
+		stmtSelectClient.setParameter("client", client);
+		
+		return !stmtSelectClient.getResultList().isEmpty();
 	}
 	
-	public boolean existeChambre(int idChambre) throws SQLException {
-		return true;
+	public boolean existeChambre(Chambre chambre) {
+		stmtSelectChambre.setParameter("chambre", chambre);
+		
+		return !stmtSelect.getResultList().isEmpty();
 	}
 	
-	public List<Reservation> getReservations(int idClient) throws SQLException {		
-		return new ArrayList<Reservation>();
+	public boolean existeChambreActive(Chambre chambre, Date dateDebut, Date dateFin) {
+		stmtSelectChambreActive.setParameter("chambre", chambre);
+		stmtSelectChambreActive.setParameter("dateDebut", dateDebut);
+		stmtSelectChambreActive.setParameter("dateFin", dateFin);
+		
+		return !stmtSelectChambreActive.getResultList().isEmpty();
 	}
 	
-	public Reservation getReservation(int idClient, int idChambre) throws SQLException {
-		return new Reservation();
+	public List<Reservation> getReservations(Client client) {		
+		stmtSelectClient.setParameter("client", client);
+		return stmtSelectClient.getResultList();
 	}
 	
-	public void reserver(int idClient, int idChambre, Date dateDebut, Date dateFin) throws SQLException {		
+	public List<Reservation> getReservation(Client client, Chambre chambre, Date dateDebut, Date dateFin) {
+		stmtSelect.setParameter("client", client);
+		stmtSelect.setParameter("chambre", chambre);
+		stmtSelect.setParameter("dateDebut", dateDebut);
+		stmtSelect.setParameter("dateFin", dateFin);
+		
+		return stmtSelect.getResultList();
+	}
+	
+	public void reserver(Reservation reservation) {
+		cx.getConnection().persist(reservation);
 	}
 }
