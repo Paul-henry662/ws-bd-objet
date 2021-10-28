@@ -6,6 +6,6 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="objectdb-2.8.6/bin/objectdb.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Syapi_DYG/OneDrive/Documents/Prosit X2/Sherbrooke/Conference 3 Sherbrooke/TP git/ws-bd-objet/objectdb.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

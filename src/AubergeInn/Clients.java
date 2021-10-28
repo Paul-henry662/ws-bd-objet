@@ -6,12 +6,8 @@ import java.sql.SQLException;
 
 public class Clients {
 	private static final String QUERYSELECT = "SELECT c FROM Client c WHERE c.m_idClient = :idClient";
-	private static final String QUERYINSERT = "INSERT INTO Clients(idClient, prenom, nom, age) VALUES(?, ?, ?, ?)";
-	private static final String QUERYDELETE = "DELETE FROM Clients WHERE idClient = ?";
 	
 	private TypedQuery<Client> stmtSelect;
-	private TypedQuery<Client> stmtInsert;
-	private TypedQuery<Client> stmtDelete;
 	private Connexion cx;
 	
 	public Clients(Connexion cx)  {
@@ -25,16 +21,22 @@ public class Clients {
 	}
 	
 	public boolean existe(int idClient)  {
-		return true;
+		stmtSelect.setParameter("idClient", idClient);
+		return !stmtSelect.getResultList().isEmpty(); 
+		
 	}
 	
 	public Client getClient(int idClient)  {
-		return new Client();
+		stmtSelect.setParameter("idClient", idClient);
+		return stmtSelect.getSingleResult();
+		
 	}
 	
-	public void ajouterClient(int idClient, String prenom, String nom, int age)  {
+	public void ajouterClient(Client client)  {
+		cx.getConnection().persist(client);
 	}
 	
-	public void supprimerClient(int idClient)  {
+	public void supprimerClient(Client client)  {
+		cx.getConnection().remove(client);
 	}
 }

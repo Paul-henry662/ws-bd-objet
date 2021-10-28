@@ -28,3 +28,4 @@ hs_err_pid*
 #objectDB
 objectdb-2.8.6/
 *.odb$
+/bin/
