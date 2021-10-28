@@ -23,7 +23,7 @@
 hs_err_pid*
 
 #eclipse
-metadata/
+.metadata/
 
 #objectDB
 objectdb-2.8.6/
